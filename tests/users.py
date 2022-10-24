@@ -1,17 +1,20 @@
 import os
 import tweepy
+from tweepy import OAuthHandler
+    
+def twitter_api():
+    ''' Twitter API '''
 
+    consumer_key = os.environ.get('CONSUMER_KEY')
+    consumer_secret = os.environ.get('CONSUMER_SECRET')
+    access_token = os.environ.get('ACCESS_TOKEN')
+    access_secret = os.environ.get('ACCESS_SECRET')
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_secret)
+    return tweepy.API(auth)
 
 def main():
-    # Read Twitter credentials from environment variables
-    CONSUMER_KEY = os.environ.get('CONSUMER_KEY')
-    CONSUMER_SECRET = os.environ.get('CONSUMER_SECRET')
-    ACCESS_KEY = os.environ.get('ACCESS_KEY')
-    ACCESS_SECRET = os.environ.get('ACCESS_SECRET')
-
-    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-    auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
-    api = tweepy.API(auth)
+    api = twitter_api()
 
 if __name__ == "__main__":
     main()
