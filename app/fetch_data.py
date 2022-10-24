@@ -27,6 +27,7 @@ from functools import partial
 from time import sleep
 import requests
 import tweepy
+from tweepy import OAuthHandler
 import json
 import pandas as pd
 import random
@@ -304,10 +305,11 @@ def main():
         auths = [tweepy.OAuth2AppHandler(credential["api_key"],
                                          consumer_secret=credential["api_secret_key"]) for credential in credentials]
     else:
-        auths = [tweepy.OAuth1UserHandler(consumer_key=credential["api_key"],
-                                          consumer_secret=credential["api_secret_key"],
-                                          access_token=credential["access_token"],
-                                          access_token_secret=credential["access_token_secret"]) for credential in credentials]
+        auths = [OAuthHandler(credential["api_key"],
+                              credential["api_secret_key"]) for credential in credentials]
+        for i in range(len(auths)):
+            auths[i].set_access_token(credentials[i]["access_token"],
+                                  credentials[i]["access_token_secret"])
     apis = [tweepy.API(auth, wait_on_rate_limit=False) for auth in auths]
 
     try:
